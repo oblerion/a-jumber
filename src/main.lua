@@ -18,20 +18,24 @@ require("data_font")
 
 require("screen_title")
 require("screen_game")
-
+require("screen_tuto")
 local mode = 0
 function v()
-  if(mode==0)then 
-    title()
-    if( vthumb.buttonA.pressed==true or 
-        vthumb.buttonB.pressed==true or 
-        vthumb.buttonU.pressed==true or 
-        vthumb.buttonD.pressed==true or 
-        vthumb.buttonL.pressed==true or
-        vthumb.buttonR.pressed==true)then
-      mode=1
+  if(mode<2)then 
+    if( vthumb.buttonA.justPressed==true or 
+        vthumb.buttonB.justPressed==true or 
+        vthumb.buttonU.justPressed==true or 
+        vthumb.buttonD.justPressed==true or 
+        vthumb.buttonL.justPressed==true or
+        vthumb.buttonR.justPressed==true)then
+      mode=mode+1
     end
-  elseif (mode==1) then
+    if(mode==0)then 
+		title() 
+    elseif(mode==1)then 
+		tuto()
+    end
+  elseif (mode==2) then
     game()
   end
 end

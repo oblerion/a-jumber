@@ -72,6 +72,7 @@ g.Sprite.Add=function(spr,inv)
     table.insert(g.lsprite16x8,t)
     table.insert(g.lsprite16x8_inv,inv)
   elseif(#spr==16 and spr[1]:len()==16)then
+    --print("begin ",#g.lsprite16x16)
     local i,j,k
     local lt={}
     local t={}
@@ -89,6 +90,7 @@ g.Sprite.Add=function(spr,inv)
     end
     table.insert(g.lsprite16x16,t)
     table.insert(g.lsprite16x16_inv,inv)
+     --print("end ",#g.lsprite16x16)
   end
 end
 g.Sprite.Draw=function(x,y,id)
@@ -153,7 +155,7 @@ g.World.Draw=function(t)
   end
 end
 
-g.Map={lt={}}
+g.Map={lt={},curant_id=0}
 g.Map.Create=function(t)
   local i,j
   local lm={}
@@ -165,15 +167,21 @@ g.Map.Create=function(t)
   table.insert(g.Map.lt, lm)
 end
 g.Map.Get=function(x,y,id)
-  return g.Map.lt[id][((y-1)*9)+x]
+  if(type(g.Map.lt[id][(y*9)+x+1])=="number")then return g.Map.lt[id][(y*9)+x+1] end
+  return -1
 end
-g.Map.Draw=function(id)
-  for i=1,5 do
-    for j=1,9 do
-      if(g.Map.lt[id][((i-1)*9)+j]~=0)then
-        --g.Sprite.Draw(1+(j-1)*8,1+(i-1)*8,t[((i-1)*9)+j])
-        g.Tile.Draw(1+(j-1)*8,1+(i-1)*8,
-          g.Map.lt[id][((i-1)*9)+j])
+g.Map.SetCurantId=function(id)
+  g.Map.curant_id=id
+end
+g.Map.Draw=function()
+  if(g.Map.curant_id>0)then
+    for i=1,5 do
+      for j=1,9 do
+        if(g.Map.lt[g.Map.curant_id][((i-1)*9)+j]~=0)then
+          --g.Sprite.Draw(1+(j-1)*8,1+(i-1)*8,t[((i-1)*9)+j])
+          g.Tile.Draw(1+(j-1)*8,1+(i-1)*8,
+            g.Map.lt[g.Map.curant_id][((i-1)*9)+j])
+        end
       end
     end
   end
@@ -254,9 +262,11 @@ end
 
 g.Team={lstunitee={}}
 g.Team.Add=function(name,x,y,team)
-  local lteam = nil
-  if(team==1)then lteam =-1 end
-  table.insert(g.Team.lstunitee,g.Unitee.Generate(name,x,y,lteam))
+  if(team==1)then
+    table.insert(g.Team.lstunitee,g.Unitee.Generate(name,x,y,-1))
+  else
+    table.insert(g.Team.lstunitee,g.Unitee.Generate(name,x,y))
+  end
 end
 g.Team.Remove=function(id)
   table.remove(g.Team.lstunitee, id)
@@ -269,6 +279,20 @@ local n,v
     end
   end
   return -1
+end
+g.Team.Move=function(id,x,y)
+  local dist = math.abs(g.Team.lstunitee[id].x-x)+math.abs(g.Team.lstunitee[id].y-y)
+	if(g.Team.lstunitee[id].mov >= dist)then
+	print(dist,g.Team.lstunitee[id].mov)
+	g.Team.lstunitee[id].x = x
+	g.Team.lstunitee[id].y = y
+	g.Team.lstunitee[id].mov = g.Team.lstunitee[id].mov - dist
+	end
+end
+g.Team.Atk=function(id1,id2)
+	if(g.Team.lstunitee[id1].team ~= g.Team.lstunitee[id2].team)then
+	print("id1 = "..id1,"atk id2 = "..id2)
+	end 
 end
 g.Team.Draw=function()
     for n,v in pairs(g.Team.lstunitee)do
