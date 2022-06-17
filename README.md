@@ -1,4 +1,3 @@
 # a-jumber
 tactic game on vthumby
-
-made fot ("https://itch.io/jam/gamecodeur-gamejam-36")[gamejam36]
+game made for [gamecodeur gamejam36](https://itch.io/jam/gamecodeur-gamejam-36)
