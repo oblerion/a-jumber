@@ -15,27 +15,12 @@ require("data_map")
 require("data_unitee")
 require("data_tile")
 require("data_font")
+require("data_interface")
 
-require("screen_title")
-require("screen_game")
-require("screen_tuto")
-local mode = 0
+mygame.Team.Add("tank",2,1)
+mygame.Team.Add("soldat",6,3,1)
+mygame.Map.SetCurantId(1)
+mygame.Inter.Set("ititle")
 function v()
-  if(mode<2)then 
-    if( vthumb.buttonA.justPressed==true or 
-        vthumb.buttonB.justPressed==true or 
-        vthumb.buttonU.justPressed==true or 
-        vthumb.buttonD.justPressed==true or 
-        vthumb.buttonL.justPressed==true or
-        vthumb.buttonR.justPressed==true)then
-      mode=mode+1
-    end
-    if(mode==0)then 
-		title() 
-    elseif(mode==1)then 
-		tuto()
-    end
-  elseif (mode==2) then
-    game()
-  end
+  mygame.Inter.Draw()
 end

@@ -299,6 +299,7 @@ g.Team.Draw=function()
       g.Map.DrawAt(v.x,v.y,v.id)
     end
 end
+
 g.Font={lstfont={},lstw={}}
 g.Font.Create=function(car,spr,width)
   g.Font.lstfont[car]=spr
@@ -322,6 +323,29 @@ g.Font.Print=function(str,x,y)
     end
   end
 end
+
+g.Cursor={
+	x=0,
+	y=0,
+	id_select=-1
+}
+-- interface
+g.Inter={lstinter={},inter}
+g.Inter.Create=function(name,update,draw)
+	li = {name=name,fupdate=update,fdraw=draw}
+	g.Inter.lstinter[name] = li
+end
+g.Inter.Set=function(name)
+	g.Inter.inter = g.Inter.lstinter[name]
+end
+g.Inter.Draw=function()
+	if(type(g.Inter.inter)=="table")then
+		g.Inter.inter.fupdate(g)
+		g.Inter.inter.fdraw(g)
+	end
+end
+
+
 g.Anim={lstani={}}
 g.Anim.Create=function()
 
